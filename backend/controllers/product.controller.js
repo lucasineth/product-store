@@ -15,7 +15,7 @@ export const createProducts = async (req, res) => {
         res.status(201).json({ success: true, data: newProduct });
     } catch (error) {
         console.error("Erro ao criar produto:", error);
-        res.status(500).json({ success: false, message: "Erro ao criar produto", error: error.message });
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 };
 
@@ -25,7 +25,7 @@ export const getProducts = async (req, res) => {
         res.status(200).json({ success: true, data: products });
     } catch (error) {
         console.error("Erro ao buscar produtos:", error);
-        res.status(500).json({ success: false, message: "Erro ao buscar produtos", error: error.message });
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 };
 
@@ -42,23 +42,22 @@ export const updateProduct = async (req, res) => {
         res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
         console.error("Erro ao atualizar produto:", error);
-        res.status(500).json({ success: false, message: "Erro ao atualizar produto", error: error.message });
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 };
 
 export const deletedProduct = async (req, res) => {
     const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ success: false, message: "Produto não encontrado" });
+    }
+
     try {
         const deletedProduct = await Product.findByIdAndDelete(id);
-
-        if (!deletedProduct) {
-            return res.status(404).json({ success: false, message: "Produto não encontrado" });
-        }
-
-        res.status(200).json({ success: true, message: "Produto excluído com sucesso", data: deletedProduct });
+        res.status(200).json({ success: true, message: "Excluído com sucesso", data: deletedProduct });
     } catch (error) {
         console.error("Erro ao excluir produto:", error);
-        res.status(500).json({ success: false, message: "Erro ao excluir produto", error: error.message });
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 };

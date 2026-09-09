@@ -13,11 +13,13 @@ dotenv.config()
 
 const app = express();
 
+const PORT = process.env.PORT || 5000;
+
 app.use(express.json()); // para que o express consiga entender o body da requisição
 
 app.use("/api/products", productRoutes);
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
     connectDB();
-    console.log("Servidor iniciado em http://localhost:5000");
+    console.log(`Servidor iniciado em http://localhost:${PORT}`);
 });
