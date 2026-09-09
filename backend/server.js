@@ -1,0 +1,23 @@
+import express from "express";
+import dotenv from "dotenv";
+import { connectDB } from  './config/db.js'
+
+import productRoutes from './routes/product.route.js'
+
+import dns from 'node:dns';
+
+dns.setDefaultResultOrder('ipv4first');
+dns.setServers(['1.1.1.1', '9.9.9.9']);
+
+dotenv.config()
+
+const app = express();
+
+app.use(express.json()); // para que o express consiga entender o body da requisição
+
+app.use("/api/products", productRoutes);
+
+app.listen(5000, () => {
+    connectDB();
+    console.log("Servidor iniciado em http://localhost:5000");
+});
